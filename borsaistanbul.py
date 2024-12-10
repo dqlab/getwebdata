@@ -49,10 +49,16 @@ def download_borsa_istanbul_data(date=None):
         print("Error: Downloaded file is not a valid zip file")
         return False
 
+def combine_csv_files(directory):
+    csv_files = [f for f in os.listdir(directory) if f.endswith('.csv')]
+    combined_df = pd.concat([pd.read_csv(os.path.join(directory, f)) for f in csv_files])
+    combined_file_path = os.path.join(directory, 'combined_data.csv')
+    combined_df.to_csv(combined_file_path, index=False)
+    print(f"Combined CSV saved to {combined_file_path}")
+
 if __name__ == "__main__":
-    # Example usage: download today's data
-    # download_borsa_istanbul_data()
+    dates = ["20241205", "20241206", "20241207"]  # Add your list of dates here
+    for date_str in dates:
+        download_and_extract_borsa_istanbul_data(date_str)
     
-    # Or download data for a specific date
-    specific_date = datetime(2024, 12, 4)
-    download_borsa_istanbul_data(specific_date)
+    combine_csv_files("borsa_istanbul_data")
