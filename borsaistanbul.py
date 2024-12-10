@@ -7,8 +7,24 @@ Created on Thu Dec  5 23:46:45 2024
 import requests
 import zipfile
 from io import BytesIO
-from datetime import datetime
 import os
+import pandas as pd
+from datetime import datetime, timedelta
+
+def generate_date_list(start_date_str, end_date_str):
+    """Generate a list of dates between start_date and end_date (inclusive)"""
+    start_date = datetime.strptime(start_date_str, '%Y%m%d')
+    end_date = datetime.strptime(end_date_str, '%Y%m%d')
+    
+    date_list = []
+    current_date = start_date
+    while current_date <= end_date:
+        # Skip weekends (5 = Saturday, 6 = Sunday)
+        if current_date.weekday() < 5:  # Only weekdays
+            date_list.append(current_date.strftime('%Y%m%d'))
+        current_date += timedelta(days=1)
+    
+    return date_list
 
 def download_borsa_istanbul_data(date=None):
     # If no date provided, use current date
@@ -57,7 +73,13 @@ def combine_csv_files(directory):
     print(f"Combined CSV saved to {combined_file_path}")
 
 if __name__ == "__main__":
-    dates = ["20241205", "20241206", "20241207"]  # Add your list of dates here
+    # Example usage with start and end dates
+    start_date = "20231201"  # Format: YYYYMMDD
+    end_date = "20231215"    # Format: YYYYMMDD
+    
+    dates = generate_date_list(start_date, end_date)
+    print(f"Downloading data for dates: {dates}")
+    
     for date_str in dates:
         download_and_extract_borsa_istanbul_data(date_str)
     
