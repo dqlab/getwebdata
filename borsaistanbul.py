@@ -19,7 +19,7 @@ def generate_date_list(start_date_str, end_date_str):
     return date_list
 
 def download_and_extract_borsa_istanbul_data(date_str):
-    base_url = "https://borsaistanbul.com/en/sayfa/3619/debt-securities-market-data/data/bapbultenozet"
+    base_url = "https://borsaistanbul.com/data/bapbultenozet"
     file_name = f"bultenozet_{date_str}.zip"
     url = f"{base_url}/{file_name}"
     
